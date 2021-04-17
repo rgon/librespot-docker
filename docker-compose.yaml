@@ -1,0 +1,8 @@
+version: "3.3"
+
+services:
+  spotifyd:
+    build: ./docker-spotifyd/
+    volumes:
+      - ./config/spotifyd.conf:/etc/spotifyd.conf
+    network_mode: host
