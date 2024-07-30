@@ -1,8 +1,37 @@
-version: "3.3"
-
 services:
-  spotifyd:
-    build: ./docker-spotifyd/
+  # Your other services should appear here. Ensure that the service you want to restart is named the same as the CONTAINER env below, and that
+  # container_name is explicitly set (not just implied by the service name) to avoid issues with docker-compose's container naming scheme.
+  restarter:
+    image: dockercron
+    build:
+      context: ./dockerCronRestarter/
+      dockerfile: Dockerfile
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    environment:
+      # Restart every day at 6:30
+      - CRONFREQ=30 06 * * *
+      - CONTAINER=librespot
+    restart: unless-stopped
+
+  librespot:
+    container_name: librespot
+    build: 
+      context: ./librespot-docker/
+      dockerfile: Dockerfile
     volumes:
-      - ./config/spotifyd.conf:/etc/spotifyd.conf
+      - /usr/share/alsa:/usr/share/alsa
+      #- ./config/spotifyd.conf:/etc/spotifyd.conf
     network_mode: host
+    devices:
+      - "/dev/snd:/dev/snd"
+    restart: unless-stopped
+    # command: ["/bin/ash"]
+    env_file: .env # should contain LIBRESPOT_username and LIBRESPOT_password
+    environment:
+      - LIBRESPOT_name=paisana_on_rgon_pack
+      - LIBRESPOT_bitrate=320
+      - LIBRESPOT_enable-volume-normalisation=true
+      - LIBRESPOT_normalisation-pregain=-10
+      - LIBRESPOT_device-type=speaker
+      - LIBRESPOT_alsa-mixer-control=PCM
+      # - LIBRESPOT_device=plughw:CARD=UA2X2,DEV=0
