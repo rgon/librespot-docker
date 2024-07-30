@@ -2,7 +2,7 @@ services:
   # Your other services should appear here. Ensure that the service you want to restart is named the same as the CONTAINER env below, and that
   # container_name is explicitly set (not just implied by the service name) to avoid issues with docker-compose's container naming scheme.
   restarter:
-    image: dockercron
+    # image: dockercron
     build:
       context: ./dockerCronRestarter/
       dockerfile: Dockerfile
