@@ -9,7 +9,9 @@ services:
     volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
     environment:
       # Restart every day at 6:30
-      - CRONFREQ=30 06 * * *
+      # - CRONFREQ=30 06 * * *
+      # Restart every week on sunday at 6:30
+      - CRONFREQ=30 06 * * 0
       - CONTAINER=librespot
     restart: unless-stopped
 
