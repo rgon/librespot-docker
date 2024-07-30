@@ -10,7 +10,8 @@ for var in `env`
 do
     if [[ $var =~ ^LIBRESPOT_ ]]; then
         #Get the name of the variable
-        name=$(echo "$var" | sed -r "s/LIBRESPOT_(.*)=.*/\1/" | tr '[:upper:]' '[:lower:]')
+        key="${string%%=*}"
+        name="${key#LIBRESPOT_}"
         #Get the value of the variable: split from first = and get the rest, including possibly other =
         # so that values such as LIBRESPOT_device=plughw:CARD=UA2X2,DEV=0 work
         value="${var#*=}"
