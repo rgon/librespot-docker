@@ -11,8 +11,9 @@ do
     if [[ $var =~ ^LIBRESPOT_ ]]; then
         #Get the name of the variable
         name=$(echo "$var" | sed -r "s/LIBRESPOT_(.*)=.*/\1/" | tr '[:upper:]' '[:lower:]')
-        #Get the value of the variable
-        value=$(echo "$var" | cut -d'=' -f2)
+        #Get the value of the variable: split from first = and get the rest, including possibly other =
+        # so that values such as LIBRESPOT_device=plughw:CARD=UA2X2,DEV=0 work
+        value="${var#*=}"
 
         command="$command --$name $value"
     fi
